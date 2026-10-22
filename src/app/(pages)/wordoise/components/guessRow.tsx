@@ -1,6 +1,6 @@
 import cn from "clsx";
 
-type GuessRowProps = { word: String, guess: String }
+type GuessRowProps = { word: string, guess: string }
 type WordLetter = {
     occurrences: number,
     correctGuesses: number,
@@ -39,17 +39,22 @@ export default function GuessRow(props: GuessRowProps) {
             });
         });
 
+        // Mark all exact matches before checking for misplaced letters.
         guessArray.forEach((guessLetter, index) => {
-            const wordStats = wordLetterSet.get(guessLetter);
-            const guessStats = guessLetterMap.get(index);
-
             if (guessLetter === wordArray[index]) {
-                if (wordStats) wordStats.correctGuesses += 1;
-                if (guessStats) guessStats.shouldBeGreen = true;
+                wordLetterSet.get(guessLetter)!.correctGuesses += 1;
+                guessLetterMap.get(index)!.shouldBeGreen = true;
+            }
+        });
 
-            } else if (wordArray.includes(guessLetter) && occurrencesRemain(guessLetter)) {
-                if (wordStats) wordStats.misplacedGuesses += 1;
-                if (guessStats) guessStats.shouldBeYellow = true;
+        // Only mark yellow when an occurrence remains after exact matches.
+        guessArray.forEach((guessLetter, index) => {
+            if (guessLetter === wordArray[index]) return;
+
+            const wordStats = wordLetterSet.get(guessLetter);
+            if (wordStats && occurrencesRemain(guessLetter)) {
+                wordStats.misplacedGuesses += 1;
+                guessLetterMap.get(index)!.shouldBeYellow = true;
             }
         });
     }
@@ -80,7 +85,7 @@ function blankRow(wordArray: string[]) {
     });
 }
 
-function getLetterBoxColor(guessLetterSet: Map<number, GuessLetter>,index: number): import("clsx").ClassValue {
+function getLetterBoxColor(guessLetterSet: Map<number, GuessLetter>, index: number): import("clsx").ClassValue {
     return guessLetterSet.get(index)?.shouldBeGreen
         ? "bg-green-700"
         : guessLetterSet.get(index)?.shouldBeYellow
