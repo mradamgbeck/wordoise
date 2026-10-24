@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import GuessRow from "./guessRow";
+import UsedLetters from "./usedLetters";
 
 type WordoisePuzzleProps = { size: number, maxGuesses: number, word?: string }
 
@@ -18,7 +19,6 @@ export default function WordoisePuzzleComponent(props: WordoisePuzzleProps) {
 
         if(guessInput.toUpperCase() === word) {
             window.alert("YOU DID IT!");
-            return;
         }
 
         if (guesses.some((guess) => guess.toUpperCase() === guessInput.toUpperCase())) {
@@ -59,6 +59,7 @@ export default function WordoisePuzzleComponent(props: WordoisePuzzleProps) {
             >
                 Submit
             </button>
+            <UsedLetters guesses={guesses} />
         </form>
         {puzzleRows}
     </div>);

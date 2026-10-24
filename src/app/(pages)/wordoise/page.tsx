@@ -9,6 +9,8 @@ type PageProps = {
 };
 const MAX_PUZZLE_SIZE = 25;
 const MAX_MAX_GUESS_AMOUNT = 25;
+const DEFAULT_PUZZLE_SIZE = "5";
+const DEFAULT_MAX_GUESSES = "6";
 
 export default async function Wordoise({ searchParams }: PageProps) {
     const params = await searchParams;
@@ -27,13 +29,13 @@ export default async function Wordoise({ searchParams }: PageProps) {
 
     const word = validSettings ? getWordOfSize(size) : undefined;
     console.log("THE WORD IS: ", word);
-    
+
     return (
         <main>
             <div className="flex-col space-y-1">
                 <form method="get">
                     <div className="items-center">
-                        <div className="p-1">
+                        <div className="p-1 flex-row justify-evenly items-center space-x-1">
                             <label className="text-green-500 p-3" htmlFor="puzzleSize">
                                 Puzzle Size
                             </label>
@@ -43,8 +45,8 @@ export default async function Wordoise({ searchParams }: PageProps) {
                                 type="number"
                                 name="puzzleSize"
                                 min="1"
-                                max="25"
-                                defaultValue={params.puzzleSize ?? "5"}
+                                max={MAX_PUZZLE_SIZE}
+                                defaultValue={params.puzzleSize ?? DEFAULT_PUZZLE_SIZE}
                                 required
                             />
                             <label className="text-green-500 p-3" htmlFor="maxGuesses">
@@ -56,14 +58,14 @@ export default async function Wordoise({ searchParams }: PageProps) {
                                 type="number"
                                 name="maxGuesses"
                                 min="1"
-                                max="25"
-                                defaultValue={params.maxGuesses ?? "6"}
+                                max={MAX_MAX_GUESS_AMOUNT}
+                                defaultValue={params.maxGuesses ?? DEFAULT_MAX_GUESSES}
                                 required
                             />
+                            <button className="bg-green-700 rounded-md p-1" type="submit">
+                                Create
+                            </button>
                         </div>
-                        <button className="bg-green-700 rounded-md p-1" type="submit">
-                            Create
-                        </button>
                     </div>
                 </form>
 
